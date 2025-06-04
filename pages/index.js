@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>StreetEats.ai – Coming Soon</title>
+        <title>StreetEats.ai – Coming Soon!</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
           href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap"
