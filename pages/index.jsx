@@ -7,7 +7,7 @@ export default function Home() {
   const [vendors, setVendors] = useState([])
 
   useEffect(() => {
-    import('@/data/vendors.json').then((mod) => {
+    import('../data/vendors.json').then((mod) => {
       setVendors(mod.default)
     })
   }, [])
