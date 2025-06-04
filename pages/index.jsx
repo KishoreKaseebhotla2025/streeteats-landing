@@ -1,28 +1,27 @@
-import Head from 'next/head';
-import VendorCard from '../components/VendorCard';
-import vendors from '../data/vendors.json';
+import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
+
+const VendorCard = dynamic(() => import('@/components/VendorCard'), { ssr: false })
 
 export default function Home() {
+  const [vendors, setVendors] = useState([])
+
+  useEffect(() => {
+    import('@/data/vendors.json').then((mod) => {
+      setVendors(mod.default)
+    })
+  }, [])
+
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-6">
-      <Head>
-        <title>StreetEats.ai</title>
-      </Head>
-
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-center text-gray-800">
-          Discover Street Food Vendors
-        </h1>
-        <p className="text-center text-gray-600 mt-2">
-          Curated from YouTube and Instagram
-        </p>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {vendors.map((vendor) => (
-          <VendorCard key={vendor.id} vendor={vendor} />
+    <main className="min-h-screen bg-orange-50 p-6">
+      <h1 className="text-3xl font-bold text-center text-orange-700 mb-8">
+        StreetEats.ai (Dev Preview)
+      </h1>
+      <div className="flex flex-wrap justify-center gap-6">
+        {vendors.map((vendor, index) => (
+          <VendorCard key={index} vendor={vendor} />
         ))}
       </div>
-    </div>
-  );
+    </main>
+  )
 }
