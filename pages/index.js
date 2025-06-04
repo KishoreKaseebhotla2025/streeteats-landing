@@ -48,7 +48,7 @@ export default function Home() {
         {/* Header */}
         <div className="section header-section">
           <Image 
-            src="/assets/streeteats-logo.png" 
+            src="/streeteats-logo.png" 
             alt="StreetEats.ai pin logo with food cart" 
             width={200}
             height={100}
@@ -90,7 +90,7 @@ export default function Home() {
         <div className="section social-section">
           <p style={{ fontWeight: 'bold' }}>Follow us</p>
           <a href="https://www.instagram.com/streeteats.ai/" target="_blank" rel="noopener noreferrer">
-            <Image 
+            <img 
               src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" 
               alt="Instagram" 
               width={40} 
@@ -98,7 +98,7 @@ export default function Home() {
             />
           </a>
           <a href="https://www.youtube.com/@StreetEatsAI" target="_blank" rel="noopener noreferrer">
-            <Image 
+            <img 
               src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" 
               alt="YouTube" 
               width={55} 
