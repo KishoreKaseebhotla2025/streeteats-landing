@@ -47,12 +47,10 @@ export default function Home() {
       <main>
         {/* Header */}
         <div className="section header-section">
-          <Image 
+          <img 
             src="/streeteats-logo.png" 
             alt="StreetEats.ai pin logo with food cart" 
-            width={200}
-            height={100}
-            priority
+            className="logo"
           />
         </div>
 
@@ -93,16 +91,14 @@ export default function Home() {
             <img 
               src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" 
               alt="Instagram" 
-              width={40} 
-              height={40} 
+              className="social-icon"
             />
           </a>
           <a href="https://www.youtube.com/@StreetEatsAI" target="_blank" rel="noopener noreferrer">
             <img 
               src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" 
               alt="YouTube" 
-              width={55} 
-              height={40} 
+              className="social-icon youtube"
             />
           </a>
         </div>
@@ -130,6 +126,11 @@ export default function Home() {
         .header-section {
           background-color: #fff8f0;
           border: none;
+        }
+
+        .logo {
+          max-width: 200px;
+          height: auto;
         }
 
         h1 {
@@ -196,6 +197,17 @@ export default function Home() {
         .social-section a {
           vertical-align: middle;
           margin: 0 15px;
+        }
+
+        .social-icon {
+          width: 40px;
+          height: 40px;
+          vertical-align: middle;
+        }
+
+        .social-icon.youtube {
+          width: 55px;
+          height: 40px;
         }
 
         .footer {
