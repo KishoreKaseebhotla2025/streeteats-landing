@@ -1,22 +1,24 @@
-// pages/index.js
 import Head from 'next/head'
 
 export default function Home() {
   return (
     <>
       <Head>
-        <title>StreetEats.ai – Coming Soon!</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>StreetEats.ai – Coming Soon</title>
         <link
           href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap"
           rel="stylesheet"
         />
       </Head>
 
-      <main className="font-[Montserrat] text-[#222] bg-white">
+      <main className="bg-white text-[#222] font-[Montserrat]">
         {/* Header */}
-        <section className="w-full py-10 bg-[#fff8f0] text-center">
-          <img src="/streeteats-logo.png" alt="StreetEats.ai logo" className="mx-auto max-w-[200px]" />
+        <section className="w-full py-10 bg-[#fff8f0] text-center border-none">
+          <img
+            src="/streeteats-logo.png"
+            alt="StreetEats.ai logo"
+            className="mx-auto max-w-[200px]"
+          />
         </section>
 
         {/* Main Section */}
