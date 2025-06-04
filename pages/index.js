@@ -48,7 +48,7 @@ export default function Home() {
         {/* Header */}
         <div className="section header-section">
           <img 
-            src="/streeteats-logo.png" 
+            src="streeteats-logo.png" 
             alt="StreetEats.ai pin logo with food cart" 
             className="logo"
           />
