@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1",
+    "name": "Baba Chaat Bhandar",
+    "location": "Karol Bagh, Delhi",
+    "lat": 28.6518,
+    "lng": 77.1908,
+    "cuisine": "Chaat",
+    "summary": "Famous for spicy golgappas and papdi chaat. Always crowded in the evenings.",
+    "videoUrl": "https://www.youtube.com/watch?v=example1"
+  },
+  {
+    "id": "2",
+    "name": "Ram Ki Bandi",
+    "location": "Nampally, Hyderabad",
+    "lat": 17.385,
+    "lng": 78.4867,
+    "cuisine": "Dosa",
+    "summary": "Legendary night-time dosa bandi known for cheese and paneer dosas.",
+    "videoUrl": "https://www.youtube.com/watch?v=example2"
+  },
+  {
+    "id": "3",
+    "name": "Tunday Kababi",
+    "location": "Lucknow Chowk, Uttar Pradesh",
+    "lat": 26.8467,
+    "lng": 80.9462,
+    "cuisine": "Kebabs",
+    "summary": "Iconic kebab stall known for melt-in-mouth galouti kebabs.",
+    "videoUrl": "https://www.youtube.com/watch?v=example3"
+  },
+  {
+    "id": "4",
+    "name": "Elote Queen",
+    "location": "Mexico City",
+    "lat": 19.4326,
+    "lng": -99.1332,
+    "cuisine": "Elote, Street Corn",
+    "summary": "Serves Mexican elotes with cheese, chili, and lime — a true street delight.",
+    "videoUrl": "https://www.youtube.com/watch?v=example4"
+  },
+  {
+    "id": "5",
+    "name": "Soi 38 Pad Thai",
+    "location": "Bangkok, Thailand",
+    "lat": 13.7563,
+    "lng": 100.5018,
+    "cuisine": "Pad Thai",
+    "summary": "Pad Thai vendor drawing long lines for authentic flavors and wok technique.",
+    "videoUrl": "https://www.youtube.com/watch?v=example5"
+  }
+]
