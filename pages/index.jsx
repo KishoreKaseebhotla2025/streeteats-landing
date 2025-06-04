@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-const VendorCard = dynamic(() => import('@/components/VendorCard'), { ssr: false })
+const VendorCard = dynamic(() => import('../components/VendorCard'), { ssr: false })
 
 export default function Home() {
   const [vendors, setVendors] = useState([])
