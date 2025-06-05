@@ -24,26 +24,26 @@ export default function HomePage() {
         />
       </Head>
 
-      <div className="section header-section">
+      <div className="section header-section" style={{ backgroundColor: '#fff8f0', textAlign: 'center', padding: '2rem 0' }}>
         <img
-          src="/assets/streeteats-logo.png"
+          src="/streeteats-logo.png"
           alt="StreetEats.ai pin logo with food cart"
-          style={{ maxWidth: '200px', height: 'auto' }}
+          style={{ maxWidth: '200px', height: 'auto', margin: '0 auto' }}
         />
       </div>
 
-      <div className="section main-section">
+      <div className="section main-section" style={{ textAlign: 'center' }}>
         <h1 style={{ fontSize: '2.6rem', marginBottom: '1rem' }}>StreetEats.ai</h1>
         <p style={{ fontSize: '1.1rem', maxWidth: 600, margin: '0 auto 2rem auto' }}>
           India’s tastiest street food discovery app is cooking! We're mapping vendors, stories,
           and flavors — right from the streets to your screen.
         </p>
 
-        <div style={{ height: 500, margin: '2rem auto', maxWidth: 960 }}>
+        <div style={{ height: 400, margin: '2rem auto', maxWidth: 960 }}>
           <LeafletMap />
         </div>
 
-        <div className="email-box">
+        <div className="email-box" style={{ textAlign: 'center' }}>
           <form action="https://formspree.io/f/xeokqjdk" method="POST">
             <input
               type="email"
@@ -77,7 +77,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="section social-section" style={{ backgroundColor: '#fef3e7' }}>
+      <div className="section social-section" style={{ backgroundColor: '#fef3e7', textAlign: 'center' }}>
         <p style={{ fontWeight: 'bold' }}>Follow us</p>
         <a href="https://www.instagram.com/streeteats.ai/" target="_blank">
           <img
