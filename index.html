@@ -80,6 +80,13 @@
   }
 </style>
 
+<!-- Leaflet CSS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-sA+e2EyJp6z9r7pna0NxJZVfToEFzA2xGSVnFTmP2r0="
+  crossorigin=""
+/>
 </head>
   
 <body>
@@ -90,15 +97,20 @@
 
   <!-- Main Content -->
   <div class="section main-section">
-    <h1>StreetEats.ai</h1>
-    <p>India’s tastiest street food discovery app is cooking! We're mapping vendors, stories, and flavors — right from the streets to your screen.</p>
-    <div class="email-box">
-      <form action="https://formspree.io/f/xeokqjdk" method="POST">
-        <input type="email" name="email" placeholder="Enter your email" required>
-        <button type="submit">Notify Me</button>
-      </form>
-    </div>
+  <h1>StreetEats.ai</h1>
+  <p>India’s tastiest street food discovery app is cooking! We're mapping vendors, stories, and flavors — right from the streets to your screen.</p>
+
+  <!-- Map Section -->
+  <div id="vendor-map" style="height: 500px; margin: 2rem auto; max-width: 960px;"></div>
+
+  <div class="email-box">
+    <form action="https://formspree.io/f/xeokqjdk" method="POST">
+      <input type="email" name="email" placeholder="Enter your email" required>
+      <button type="submit">Notify Me</button>
+    </form>
   </div>
+  </div>
+
 
   <!-- Social Section -->
   <div class="section social-section">
@@ -113,6 +125,69 @@
 
   <!-- Footer -->
   <div class="footer">© 2025 StreetEats.ai</div>
+  
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1jNq3e1mWtln8MubxR3w1FgMQMZMLmMXPpCk2f2U="
+    crossorigin=""
+  ></script>
+
+<script>
+  const mockVendors = [
+    {
+      name: "Sharma's Chole Bhature",
+      location: "Karol Bagh, Delhi",
+      coordinates: [28.6508, 77.1901],
+      rating: 4.8
+    },
+    {
+      name: "Mumbai Vada Pav King",
+      location: "Andheri West, Mumbai",
+      coordinates: [19.1352, 72.8264],
+      rating: 4.6
+    },
+    {
+      name: "Hyderabadi Biryani Cart",
+      location: "Charminar, Hyderabad",
+      coordinates: [17.3616, 78.4747],
+      rating: 4.9
+    },
+    {
+      name: "Bangalore Dosa Corner",
+      location: "Koramangala, Bangalore",
+      coordinates: [12.9352, 77.6245],
+      rating: 4.7
+    },
+    {
+      name: "Delhi Chaat Wala",
+      location: "Chandni Chowk, Delhi",
+      coordinates: [28.6506, 77.2334],
+      rating: 4.5
+    },
+    {
+      name: "Kolkata Kathi Roll",
+      location: "Park Street, Kolkata",
+      coordinates: [22.5448, 88.3426],
+      rating: 4.4
+    }
+  ];
+
+  const map = L.map('vendor-map').setView([20.5937, 78.9629], 5);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  mockVendors.forEach((vendor) => {
+    const marker = L.marker(vendor.coordinates).addTo(map);
+    marker.bindPopup(
+      `<strong>${vendor.name}</strong><br>${vendor.location}<br>Rating: ${vendor.rating}`
+    );
+  });
+</script>
+
 </body>
 
 
