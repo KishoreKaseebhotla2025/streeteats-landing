@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const OPENAI_API_KEY = 'sk-REDACTED'; // Use NEXT_PUBLIC_ env var in production
+const OPENAI_API_KEY = 'sk-REDACTED';
 
 const allVendors = [
-  // 16 vendors total: 6 original + 10 new
   { name: "Sharma's Chole Bhature", location: "Karol Bagh, Delhi", cuisine: "North Indian", tags: ["Vegetarian", "Chole Bhature"], coordinates: [28.6508, 77.1901], rating: 4.8 },
   { name: "Mumbai Vada Pav King", location: "Andheri West, Mumbai", cuisine: "Maharashtrian", tags: ["Vada Pav", "Snacks"], coordinates: [19.1352, 72.8264], rating: 4.6 },
   { name: "Hyderabadi Biryani Cart", location: "Charminar, Hyderabad", cuisine: "Hyderabadi", tags: ["Biryani", "Mutton"], coordinates: [17.3616, 78.4747], rating: 4.9 },
@@ -51,6 +50,12 @@ const SearchableVendorMap = () => {
     });
   }, [vendors, map]);
 
+  useEffect(() => {
+    if (!searchInput.trim()) {
+      setVendors(allVendors);
+    }
+  }, [searchInput]);
+
   const handleSearch = async () => {
     if (!searchInput.trim()) {
       setVendors(allVendors);
@@ -68,13 +73,14 @@ const SearchableVendorMap = () => {
           messages: [
             {
               role: 'user',
-              content: `Extract keywords like food, city, or cuisine from this: "${searchInput}" and return as JSON.`
+              content: `Extract keywords for food, location, and cuisine from: "${searchInput}". Always respond with only JSON like { "food": "", "location": "", "cuisine": "" }.`
             }
           ]
         })
       });
       const data = await res.json();
       const text = data.choices[0].message.content;
+      console.log("OpenAI raw response:", text);
       const jsonMatch = text.match(/{[\s\S]*}/);
       if (!jsonMatch) throw new Error('Invalid JSON in OpenAI response');
       const parsed = JSON.parse(jsonMatch[0]);
