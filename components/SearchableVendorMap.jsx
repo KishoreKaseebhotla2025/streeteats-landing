@@ -7,8 +7,7 @@ const OPENAI_API_KEY = 'sk-REDACTED'; // Use NEXT_PUBLIC_ env var in production
 
 const allVendors = [
   // 16 vendors total: 6 original + 10 new
-  {
-    name: "Sharma's Chole Bhature", location: "Karol Bagh, Delhi", cuisine: "North Indian", tags: ["Vegetarian", "Chole Bhature"], coordinates: [28.6508, 77.1901], rating: 4.8 },
+  { name: "Sharma's Chole Bhature", location: "Karol Bagh, Delhi", cuisine: "North Indian", tags: ["Vegetarian", "Chole Bhature"], coordinates: [28.6508, 77.1901], rating: 4.8 },
   { name: "Mumbai Vada Pav King", location: "Andheri West, Mumbai", cuisine: "Maharashtrian", tags: ["Vada Pav", "Snacks"], coordinates: [19.1352, 72.8264], rating: 4.6 },
   { name: "Hyderabadi Biryani Cart", location: "Charminar, Hyderabad", cuisine: "Hyderabadi", tags: ["Biryani", "Mutton"], coordinates: [17.3616, 78.4747], rating: 4.9 },
   { name: "Bangalore Dosa Corner", location: "Koramangala, Bangalore", cuisine: "South Indian", tags: ["Dosa", "Vegetarian"], coordinates: [12.9352, 77.6245], rating: 4.7 },
@@ -76,7 +75,7 @@ const SearchableVendorMap = () => {
       });
       const data = await res.json();
       const text = data.choices[0].message.content;
-      const jsonMatch = text.match(/{.*}/s); // Match first {...} block
+      const jsonMatch = text.match(/{[\s\S]*}/);
       if (!jsonMatch) throw new Error('Invalid JSON in OpenAI response');
       const parsed = JSON.parse(jsonMatch[0]);
 
