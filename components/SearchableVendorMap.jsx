@@ -62,21 +62,10 @@ const SearchableVendorMap = () => {
       return;
     }
     try {
-      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      const res = await fetch('/api/search', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            {
-              role: 'user',
-              content: `Extract keywords for food, location, and cuisine from: "${searchInput}". Always respond with only JSON like { "food": "", "location": "", "cuisine": "" }.`
-            }
-          ]
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: searchInput }),
       });
       const data = await res.json();
       const text = data.choices[0].message.content;
