@@ -1,4 +1,13 @@
 // pages/api/search.js
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '1mb',
+    },
+  },
+};
+
 console.log("🔔 /api/search endpoint hit");
 
 export default async function handler(req, res) {
@@ -6,7 +15,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { query } = req.body;
+  const { query } = req.body || {};
+  if (!query || typeof query !== 'string') {
+    return res.status(400).json({ error: 'Invalid query input' });
+  }
+
   console.log("🔍 Incoming query:", query);
   console.log("🔐 OPENAI_API_KEY present:", !!process.env.OPENAI_API_KEY);
 
