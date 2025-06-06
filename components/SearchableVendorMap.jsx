@@ -76,7 +76,9 @@ const SearchableVendorMap = () => {
       });
       const data = await res.json();
       const text = data.choices[0].message.content;
-      const parsed = JSON.parse(text);
+      const jsonMatch = text.match(/{.*}/s); // Match first {...} block
+      if (!jsonMatch) throw new Error('Invalid JSON in OpenAI response');
+      const parsed = JSON.parse(jsonMatch[0]);
 
       const filtered = allVendors.filter((v) => {
         return (
