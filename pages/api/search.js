@@ -21,7 +21,8 @@ export default async function handler(req, res) {
   }
 
   console.log("🔍 Incoming query:", query);
-  console.log("🔐 OPENAI_API_KEY present:", !!process.env.OPENAI_API_KEY);
+  console.log("🔐 OPENAI_API_KEY value:", process.env.OPENAI_API_KEY);
+
 
   if (!query || typeof query !== 'string') {
     return res.status(400).json({ error: 'Invalid query input' });
