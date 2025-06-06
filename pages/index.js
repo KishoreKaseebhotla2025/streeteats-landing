@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useEffect } from 'react';
 
-const LeafletMap = dynamic(() => import('../components/LeafletMap'), { ssr: false });
+const SearchableVendorMap = dynamic(() => import('../components/SearchableVendorMap'), { ssr: false });
 
 export default function HomePage() {
   useEffect(() => {
@@ -39,11 +39,9 @@ export default function HomePage() {
           and flavors — right from the streets to your screen.
         </p>
 
-        <div style={{ height: 400, margin: '2rem auto', maxWidth: 960 }}>
-          <LeafletMap />
-        </div>
+        <SearchableVendorMap />
 
-        <div className="email-box" style={{ textAlign: 'center' }}>
+        <div className="email-box" style={{ textAlign: 'center', marginTop: '2rem' }}>
           <form action="https://formspree.io/f/xeokqjdk" method="POST">
             <input
               type="email"
