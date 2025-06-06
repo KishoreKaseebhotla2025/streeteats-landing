@@ -1,4 +1,5 @@
 // pages/api/search.js
+console.log("🔔 /api/search endpoint hit");
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
