@@ -18,9 +18,11 @@ export default function SearchTest() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Unknown error');
       setResult(data);
-    } catch (err) {
-      setError(err.message);
+      } catch (err) {
+        console.error("❌ Search API error:", err);
+        return res.status(500).json({ error: 'Failed to process search', details: err.message });
     }
+
   };
 
   return (
