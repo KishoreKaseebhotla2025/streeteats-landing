@@ -1,3 +1,6 @@
+
+console.log("🔔 /api/search endpoint hit");
+
 // components/SearchableVendorMap.jsx
 import { useEffect, useState } from 'react';
 import L from 'leaflet';
