@@ -1,5 +1,5 @@
 // pages/api/search-hybrid.js
-import { extractFoodKeywords } from '../../utils/foodVariations';
+import { extractFoodKeywords } from '../../lib/food_variations';
 
 export default async function handler(req, res) {
   console.log("🔔 /api/search-hybrid endpoint hit");
