@@ -21,7 +21,7 @@ export default function SearchTest() {
       } catch (err) {
         console.error("❌ Search API error:", err);
         return res.status(500).json({ error: 'Failed to process search', details: err.message });
-    }
+      }  
 
   };
 
