@@ -6,6 +6,8 @@ export default async function handler(req, res) {
   }
 
   const { query } = req.body;
+  console.log("🔍 Incoming query:", query);
+  console.log("🔐 OPENAI_API_KEY present:", !!process.env.OPENAI_API_KEY);
 
   if (!query || typeof query !== 'string') {
     return res.status(400).json({ error: 'Invalid query input' });
@@ -28,8 +30,10 @@ export default async function handler(req, res) {
         ],
       }),
     });
-
+    console.log("📨 OpenAI response status:", openaiRes.status);
     const data = await openaiRes.json();
+    console.log("🧠 Raw OpenAI content:", data);
+
     const text = data.choices?.[0]?.message?.content || '';
     const jsonMatch = text.match(/{[\s\S]*}/);
     if (!jsonMatch) throw new Error('Failed to extract JSON from OpenAI response');
@@ -37,7 +41,7 @@ export default async function handler(req, res) {
     const parsed = JSON.parse(jsonMatch[0]);
     return res.status(200).json({ keywords: parsed });
   } catch (err) {
-    console.error('Search API error:', err);
+    console.error("❌ Search API error:", err.message);
     return res.status(500).json({ error: 'Failed to process search' });
   }
 }
