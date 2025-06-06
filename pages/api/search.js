@@ -47,7 +47,12 @@ export default async function handler(req, res) {
     console.log("🧠 OpenAI raw response:", data);
 
     if (!openaiRes.ok) {
-      return res.status(502).json({ error: 'OpenAI API error', details: data });
+      console.error("OpenAI API error:", data);
+      // Return OpenAI's actual status code instead of 502
+      return res.status(openaiRes.status).json({ 
+        error: 'OpenAI API error', 
+        details: data 
+      });
     }
 
     const content = data.choices?.[0]?.message?.content || '';
