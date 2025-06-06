@@ -1,70 +1,117 @@
-// pages/api/search.js
-
-import fetch from 'node-fetch';
+// pages/api/search-hybrid.js
+import { extractFoodKeywords } from '../../utils/foodVariations';
 
 export default async function handler(req, res) {
-  console.log("🔔 /api/search endpoint hit");
-
+  console.log("🔔 /api/search-hybrid endpoint hit");
+  
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { query } = req.body || {};
   if (!query || typeof query !== 'string') {
-    console.log("⛔ Invalid or missing query:", query);
     return res.status(400).json({ error: 'Invalid query input' });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  console.log("🔐 OPENAI_API_KEY present:", !!apiKey);
-
-  if (!apiKey) {
-    return res.status(500).json({ error: 'Missing API key' });
-  }
-
   try {
-    console.log("📤 Sending request to OpenAI...");
+    // First try dictionary-based extraction (fast and reliable)
+    const dictionaryResults = extractFoodKeywords(query);
+    console.log("📚 Dictionary results:", dictionaryResults);
 
-    const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'user',
-            content: `Extract keywords for food, location, and cuisine from: "${query}". Respond ONLY with JSON like { "food": "", "location": "", "cuisine": "" }.`,
-          },
-        ],
-      }),
-    });
-
-    console.log("📨 OpenAI response status:", openaiRes.status);
-    const data = await openaiRes.json();
-    console.log("🧠 OpenAI raw response:", data);
-
-    if (!openaiRes.ok) {
-      console.error("OpenAI API error:", data);
-      // Return OpenAI's actual status code instead of 502
-      return res.status(openaiRes.status).json({ 
-        error: 'OpenAI API error', 
-        details: data 
-      });
+    // If dictionary found everything, return immediately
+    if (dictionaryResults.food && dictionaryResults.cuisine && dictionaryResults.location) {
+      return res.status(200).json({ keywords: dictionaryResults });
     }
 
-    const content = data.choices?.[0]?.message?.content || '';
-    const jsonMatch = content.match(/{[\s\S]*}/);
-    if (!jsonMatch) throw new Error('Could not extract JSON block from OpenAI response');
+    // Use NLP as fallback for missing fields
+    const apiKey = process.env.HUGGINGFACE_API_KEY;
+    if (!apiKey) {
+      console.log("⚠️ No HuggingFace API key, using dictionary only");
+      return res.status(200).json({ keywords: dictionaryResults });
+    }
 
-    const parsed = JSON.parse(jsonMatch[0]);
-    console.log("✅ Parsed keywords:", parsed);
+    console.log("🤖 Using NLP for enhanced extraction...");
+    
+    const nlpResults = await enhanceWithNLP(query, apiKey);
+    
+    // Merge results, prioritizing dictionary matches
+    const finalKeywords = {
+      food: dictionaryResults.food || nlpResults.food || '',
+      cuisine: dictionaryResults.cuisine || nlpResults.cuisine || '',
+      location: dictionaryResults.location || nlpResults.location || ''
+    };
 
-    return res.status(200).json({ keywords: parsed });
-  } catch (err) {
-    console.error("❌ Caught error:", err);
-    return res.status(500).json({ error: 'Failed to process search', details: err.message });
+    console.log("✨ Final keywords:", finalKeywords);
+    return res.status(200).json({ keywords: finalKeywords });
+
+  } catch (error) {
+    console.error("❌ Error:", error);
+    // Fallback to dictionary results even if NLP fails
+    const fallbackResults = extractFoodKeywords(query);
+    return res.status(200).json({ 
+      keywords: fallbackResults,
+      warning: 'NLP processing failed, using basic extraction'
+    });
+  }
+}
+
+async function enhanceWithNLP(query, apiKey) {
+  try {
+    // Use a more focused NLP approach for the missing information
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/facebook/bart-large-mnli",
+      {
+        headers: { 
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          inputs: query,
+          parameters: {
+            candidate_labels: [
+              "indian food", "chinese food", "italian food", "continental food",
+              "south indian", "north indian", "street food", "restaurant",
+              "mumbai", "delhi", "bangalore", "chennai", "hyderabad", "pune",
+              "breakfast", "lunch", "dinner", "snack", "delivery", "takeaway"
+            ]
+          },
+          options: { wait_for_model: true }
+        }),
+        signal: AbortSignal.timeout(8000)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`NLP API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Extract information from classification results
+    const keywords = { food: '', cuisine: '', location: '' };
+    
+    if (data.labels && data.scores) {
+      for (let i = 0; i < Math.min(3, data.labels.length); i++) {
+        const label = data.labels[i];
+        const score = data.scores[i];
+        
+        if (score > 0.3) { // Confidence threshold
+          if (label.includes('indian') && !keywords.cuisine) {
+            keywords.cuisine = label.includes('south') ? 'south indian' : 
+                              label.includes('north') ? 'north indian' : 'indian';
+          } else if (['chinese', 'italian', 'continental'].includes(label) && !keywords.cuisine) {
+            keywords.cuisine = label;
+          } else if (['mumbai', 'delhi', 'bangalore', 'chennai', 'hyderabad', 'pune'].includes(label) && !keywords.location) {
+            keywords.location = label;
+          }
+        }
+      }
+    }
+
+    return keywords;
+  } catch (error) {
+    console.error("NLP enhancement failed:", error);
+    return { food: '', cuisine: '', location: '' };
   }
 }
