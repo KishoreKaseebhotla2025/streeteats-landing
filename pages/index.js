@@ -24,50 +24,35 @@ export default function HomePage() {
         />
       </Head>
 
-      <div className="section header-section" style={{ backgroundColor: '#fff8f0', textAlign: 'center', padding: '2rem 0' }}>
+      <div className="section header-section bg-orange-100 text-center py-8">
         <img
           src="/streeteats-logo.png"
           alt="StreetEats.ai pin logo with food cart"
-          style={{ maxWidth: '200px', height: 'auto', margin: '0 auto' }}
+          className="mx-auto max-w-xs h-auto"
         />
       </div>
 
-      <div className="section main-section" style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.6rem', marginBottom: '1rem' }}>StreetEats.ai</h1>
-        <p style={{ fontSize: '1.1rem', maxWidth: 600, margin: '0 auto 2rem auto' }}>
+      <div className="section main-section text-center px-4">
+        <h1 className="text-4xl font-bold mb-4">StreetEats.ai</h1>
+        <p className="text-lg max-w-xl mx-auto mb-8">
           India’s tastiest street food discovery app is cooking! We're mapping vendors, stories,
           and flavors — right from the streets to your screen.
         </p>
 
         <SearchableVendorMap />
 
-        <div className="email-box" style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <form action="https://formspree.io/f/xeokqjdk" method="POST">
+        <div className="email-box text-center mt-8">
+          <form action="https://formspree.io/f/xeokqjdk" method="POST" className="flex flex-wrap justify-center gap-4">
             <input
               type="email"
               name="email"
               placeholder="Enter your email"
               required
-              style={{
-                padding: '0.7rem',
-                borderRadius: 5,
-                border: '1px solid #ccc',
-                width: 250,
-                marginRight: 10,
-                maxWidth: '100%'
-              }}
+              className="px-4 py-2 border border-gray-300 rounded w-64 max-w-full"
             />
             <button
               type="submit"
-              style={{
-                padding: '0.7rem 1.2rem',
-                borderRadius: 5,
-                border: 'none',
-                backgroundColor: '#ff7a00',
-                color: 'white',
-                fontWeight: 'bold',
-                cursor: 'pointer'
-              }}
+              className="px-5 py-2 rounded bg-orange-500 text-white font-bold hover:bg-orange-600 transition-colors"
             >
               Notify Me
             </button>
@@ -75,36 +60,34 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="section social-section" style={{ backgroundColor: '#fef3e7', textAlign: 'center' }}>
-        <p style={{ fontWeight: 'bold' }}>Follow us</p>
-        <a href="https://www.instagram.com/streeteats.ai/" target="_blank">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
-            alt="Instagram"
-            width="40"
-            height="40"
-            style={{ margin: '0 15px' }}
-          />
-        </a>
-        <a href="https://www.youtube.com/@StreetEatsAI" target="_blank">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
-            alt="YouTube"
-            width="55"
-            height="40"
-            style={{ margin: '0 15px' }}
-          />
-        </a>
+      <div className="section social-section bg-orange-50 text-center py-6">
+        <p className="font-bold text-lg mb-4">Follow us</p>
+        <div className="inline-flex gap-6 justify-center items-center">
+          <a href="https://www.instagram.com/streeteats.ai/" target="_blank" rel="noopener noreferrer">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
+              alt="Instagram"
+              className="w-10 h-10 hover:scale-110 hover:opacity-80 transition-transform duration-300 cursor-pointer"
+            />
+          </a>
+          <a href="https://www.youtube.com/@StreetEatsAI" target="_blank" rel="noopener noreferrer">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
+              alt="YouTube"
+              className="w-[55px] h-10 hover:scale-110 hover:opacity-80 transition-transform duration-300 cursor-pointer"
+            />
+          </a>
+          <a href="https://x.com/StreetEatsAI" target="_blank" rel="noopener noreferrer">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/5/53/X_logo_2023.svg"
+              alt="Twitter / X"
+              className="w-10 h-10 hover:scale-110 hover:opacity-80 transition-transform duration-300 cursor-pointer"
+            />
+          </a>
+        </div>
       </div>
 
-      <div className="footer" style={{
-        padding: 20,
-        fontSize: '0.85rem',
-        color: '#999',
-        backgroundColor: '#fff8f0',
-        borderTop: '1px solid #eee',
-        textAlign: 'center'
-      }}>
+      <div className="footer py-4 text-sm text-gray-500 bg-orange-100 border-t border-gray-200 text-center">
         © 2025 StreetEats.ai
       </div>
     </>
