@@ -1,4 +1,5 @@
 // pages/api/search.js
+// improved by chat GPT and Claude 
 import { extractFoodKeywords } from '../../lib/food_variations';
 
 export default async function handler(req, res) {
