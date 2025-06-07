@@ -22,6 +22,7 @@ export default function HomePage() {
           href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap"
           rel="stylesheet"
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
       <header className="bg-orange-100 py-6 text-center">
@@ -66,9 +67,9 @@ export default function HomePage() {
           </form>
         </section>
 
-        <section className="bg-orange-50 text-center py-6">
+        <section className="bg-orange-50 text-center py-6 overflow-hidden">
           <p className="font-bold text-lg mb-4">Follow us</p>
-          <div className="flex justify-center items-center gap-8">
+          <div className="flex flex-wrap justify-center items-center gap-6 max-w-xs mx-auto">
             <a href="https://www.instagram.com/streeteats.ai/" target="_blank" rel="noopener noreferrer">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
