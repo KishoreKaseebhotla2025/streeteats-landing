@@ -11,6 +11,7 @@ StreetEats.ai is a discovery platform for street food — blending AI and human 
 ## 🚀 Tech Stack
 - API (Open AI, HuggingFace)
 - Next.js
-- HTML, CSS, JSON
+- React
+- HTML, CSS, JSON, Leaflet
 - Vercel
 - Zoho
