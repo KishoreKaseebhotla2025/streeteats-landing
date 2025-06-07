@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const OPENAI_API_KEY = 'sk-REDACTED';
-
 const allVendors = [
   { name: "Sharma's Chole Bhature", location: "Karol Bagh, Delhi", cuisine: "North Indian", tags: ["Vegetarian", "Chole Bhature"], coordinates: [28.6508, 77.1901], rating: 4.8 },
   { name: "Mumbai Vada Pav King", location: "Andheri West, Mumbai", cuisine: "Maharashtrian", tags: ["Vada Pav", "Snacks"], coordinates: [19.1352, 72.8264], rating: 4.6 },
@@ -28,6 +26,7 @@ const SearchableVendorMap = () => {
   const [map, setMap] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [vendors, setVendors] = useState(allVendors);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!map) {
@@ -61,30 +60,73 @@ const SearchableVendorMap = () => {
       setVendors(allVendors);
       return;
     }
+
+    setIsLoading(true);
     try {
+      console.log("🔍 Searching for:", searchInput);
+      
       const res = await fetch('/api/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: searchInput }),
       });
+      
+      if (!res.ok) {
+        throw new Error(`API error: ${res.status}`);
+      }
+      
       const data = await res.json();
-      const text = data.choices[0].message.content;
-      console.log("OpenAI raw response:", text);
-      const jsonMatch = text.match(/{[\s\S]*}/);
-      if (!jsonMatch) throw new Error('Invalid JSON in OpenAI response');
-      const parsed = JSON.parse(jsonMatch[0]);
+      console.log("📊 Search response:", data);
+      
+      // Handle both old and new response formats
+      const keywords = data.keywords || data.choices?.[0]?.message?.content;
+      
+      let parsed = keywords;
+      if (typeof keywords === 'string') {
+        // Handle old OpenAI string response format
+        const jsonMatch = keywords.match(/{[\s\S]*}/);
+        if (!jsonMatch) throw new Error('Invalid response format');
+        parsed = JSON.parse(jsonMatch[0]);
+      }
 
-      const filtered = allVendors.filter((v) => {
-        return (
-          (!parsed.food || v.tags.join(' ').toLowerCase().includes(parsed.food.toLowerCase())) &&
-          (!parsed.location || v.location.toLowerCase().includes(parsed.location.toLowerCase())) &&
-          (!parsed.cuisine || v.cuisine.toLowerCase().includes(parsed.cuisine.toLowerCase()))
-        );
+      console.log("🎯 Parsed keywords:", parsed);
+
+      // Enhanced filtering logic
+      const filtered = allVendors.filter((vendor) => {
+        const foodMatch = !parsed.food || 
+          vendor.tags.some(tag => tag.toLowerCase().includes(parsed.food.toLowerCase())) ||
+          vendor.name.toLowerCase().includes(parsed.food.toLowerCase());
+          
+        const locationMatch = !parsed.location || 
+          vendor.location.toLowerCase().includes(parsed.location.toLowerCase());
+          
+        const cuisineMatch = !parsed.cuisine || 
+          vendor.cuisine.toLowerCase().includes(parsed.cuisine.toLowerCase()) ||
+          (parsed.cuisine.includes('indian') && vendor.cuisine.toLowerCase().includes('indian'));
+
+        return foodMatch && locationMatch && cuisineMatch;
       });
+
+      console.log(`✅ Found ${filtered.length} matching vendors`);
       setVendors(filtered);
+      
+      // Show message if no results
+      if (filtered.length === 0) {
+        console.log("⚠️ No vendors found for search criteria");
+      }
+      
     } catch (err) {
-      console.error('Search failed:', err);
+      console.error('❌ Search failed:', err);
+      alert('Search failed. Please try again.');
       setVendors([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
   };
 
@@ -93,19 +135,56 @@ const SearchableVendorMap = () => {
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
         <input
           type="text"
-          placeholder="Search vendors by food, location, or cuisine..."
+          placeholder="Try: 'idly in bangalore', 'dosa near chennai', 'biryani hyderabad'..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          style={{ flex: 1, padding: '0.75rem', border: '1px solid #ccc', borderRadius: 6 }}
+          onKeyPress={handleKeyPress}
+          style={{ 
+            flex: 1, 
+            padding: '0.75rem', 
+            border: '1px solid #ccc', 
+            borderRadius: 6,
+            fontSize: '14px'
+          }}
         />
         <button
           onClick={handleSearch}
-          style={{ padding: '0.75rem 1.2rem', backgroundColor: '#ff7a00', color: 'white', border: 'none', borderRadius: 6 }}
+          disabled={isLoading}
+          style={{ 
+            padding: '0.75rem 1.2rem', 
+            backgroundColor: isLoading ? '#ccc' : '#ff7a00', 
+            color: 'white', 
+            border: 'none', 
+            borderRadius: 6,
+            cursor: isLoading ? 'not-allowed' : 'pointer'
+          }}
         >
-          Search
+          {isLoading ? 'Searching...' : 'Search'}
         </button>
       </div>
-      <div id="vendor-map" style={{ height: 500 }}></div>
+      
+      {vendors.length === 0 && !isLoading && searchInput.trim() && (
+        <div style={{ 
+          padding: '1rem', 
+          backgroundColor: '#fff3cd', 
+          border: '1px solid #ffeaa7', 
+          borderRadius: 6, 
+          marginBottom: '1rem',
+          textAlign: 'center'
+        }}>
+          No vendors found matching your search. Try different keywords!
+        </div>
+      )}
+      
+      <div style={{ 
+        marginBottom: '0.5rem', 
+        color: '#666', 
+        fontSize: '14px' 
+      }}>
+        Showing {vendors.length} vendor{vendors.length !== 1 ? 's' : ''}
+      </div>
+      
+      <div id="vendor-map" style={{ height: 500, borderRadius: 6 }}></div>
     </div>
   );
 };
