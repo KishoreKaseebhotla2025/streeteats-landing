@@ -2,6 +2,7 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useEffect } from 'react';
+import styles from '../styles/Home.module.css';
 
 const SearchableVendorMap = dynamic(() => import('../components/SearchableVendorMap'), { ssr: false });
 
@@ -12,100 +13,116 @@ export default function HomePage() {
     document.body.style.background = '#ffffff';
     document.body.style.color = '#222';
     document.body.style.padding = 0;
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registered: ', registration);
+          })
+          .catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
   }, []);
 
   return (
     <>
       <Head>
         <title>StreetEats.ai – Coming Soon to your favorite city!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="theme-color" content="#ff7a00" />
+        <meta name="description" content="India's tastiest street food discovery app. We're mapping vendors, stories, and flavors from the streets to your screen." />
+        
+        {/* PWA Meta Tags */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="StreetEats.ai" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileColor" content="#ff7a00" />
+        
+        {/* Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* Icons */}
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        
         <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
           rel="stylesheet"
         />
       </Head>
-
-      <div className="section header-section" style={{ backgroundColor: '#fff8f0', textAlign: 'center', padding: '2rem 0' }}>
-        <img
-          src="/streeteats-logo.png"
-          alt="StreetEats.ai pin logo with food cart"
-          style={{ maxWidth: '200px', height: 'auto', margin: '0 auto' }}
-        />
-      </div>
-
-      <div className="section main-section" style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.6rem', marginBottom: '1rem' }}>StreetEats.ai</h1>
-        <p style={{ fontSize: '1.1rem', maxWidth: 600, margin: '0 auto 2rem auto' }}>
-          India’s tastiest street food discovery app is cooking! We're mapping vendors, stories,
-          and flavors — right from the streets to your screen.
-        </p>
-
-        <SearchableVendorMap />
-
-        <div className="email-box" style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <form action="https://formspree.io/f/xeokqjdk" method="POST">
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              required
-              style={{
-                padding: '0.7rem',
-                borderRadius: 5,
-                border: '1px solid #ccc',
-                width: 250,
-                marginRight: 10,
-                maxWidth: '100%'
-              }}
-            />
-            <button
-              type="submit"
-              style={{
-                padding: '0.7rem 1.2rem',
-                borderRadius: 5,
-                border: 'none',
-                backgroundColor: '#ff7a00',
-                color: 'white',
-                fontWeight: 'bold',
-                cursor: 'pointer'
-              }}
-            >
-              Notify Me
-            </button>
-          </form>
-        </div>
-      </div>
-
-      <div className="section social-section" style={{ backgroundColor: '#fef3e7', textAlign: 'center' }}>
-        <p style={{ fontWeight: 'bold' }}>Follow us</p>
-        <a href="https://www.instagram.com/streeteats.ai/" target="_blank">
+      
+      <div className={styles.container}>
+        <header className={styles.headerSection}>
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
-            alt="Instagram"
-            width="40"
-            height="40"
-            style={{ margin: '0 15px' }}
+            src="/streeteats-logo.png"
+            alt="StreetEats.ai pin logo with food cart"
+            className={styles.logo}
           />
-        </a>
-        <a href="https://www.youtube.com/@StreetEatsAI" target="_blank">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
-            alt="YouTube"
-            width="55"
-            height="40"
-            style={{ margin: '0 15px' }}
-          />
-        </a>
-      </div>
-
-      <div className="footer" style={{
-        padding: 20,
-        fontSize: '0.85rem',
-        color: '#999',
-        backgroundColor: '#fff8f0',
-        borderTop: '1px solid #eee',
-        textAlign: 'center'
-      }}>
-        © 2025 StreetEats.ai
+        </header>
+        
+        <main className={styles.mainSection}>
+          <h1 className={styles.title}>StreetEats.ai</h1>
+          <p className={styles.description}>
+            India's tastiest street food discovery app is cooking! We're mapping vendors, stories,
+            and flavors — right from the streets to your screen.
+          </p>
+          
+          <div className={styles.mapContainer}>
+            <SearchableVendorMap />
+          </div>
+          
+          <div className={styles.emailBox}>
+            <form action="https://formspree.io/f/xeokqjdk" method="POST" className={styles.emailForm}>
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+                className={styles.emailInput}
+              />
+              <button type="submit" className={styles.submitButton}>
+                Notify Me
+              </button>
+            </form>
+          </div>
+        </main>
+        
+        <section className={styles.socialSection}>
+          <p className={styles.followText}>Follow us</p>
+          <div className={styles.socialIcons}>
+            <a href="https://www.instagram.com/streeteats.ai/" target="_blank" rel="noopener noreferrer">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
+                alt="Instagram"
+                className={styles.socialIcon}
+              />
+            </a>
+            <a href="https://x.com/StreetEatsAI" target="_blank" rel="noopener noreferrer">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg"
+                alt="X (Twitter)"
+                className={styles.socialIcon}
+              />
+            </a>
+            <a href="https://www.youtube.com/@StreetEatsAI" target="_blank" rel="noopener noreferrer">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
+                alt="YouTube"
+                className={`${styles.socialIcon} ${styles.youtubeIcon}`}
+              />
+            </a>
+          </div>
+        </section>
+        
+        <footer className={styles.footer}>
+          © 2025 StreetEats.ai
+        </footer>
       </div>
     </>
   );
