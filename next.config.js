@@ -3,7 +3,22 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   
-  // PWA Configuration
+  // Image optimization
+  images: {
+    domains: ['upload.wikimedia.org'],
+    formats: ['image/webp', 'image/avif'],
+  },
+
+  // Compression
+  compress: true,
+
+  // Performance optimizations
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['lucide-react'],
+  },
+
+  // Combined headers for PWA and Security
   async headers() {
     return [
       {
@@ -28,27 +43,6 @@ const nextConfig = {
           },
         ],
       },
-    ];
-  },
-
-  // Image optimization
-  images: {
-    domains: ['upload.wikimedia.org'],
-    formats: ['image/webp', 'image/avif'],
-  },
-
-  // Compression
-  compress: true,
-
-  // Performance optimizations
-  experimental: {
-    optimizeCss: true,
-    optimizePackageImports: ['lucide-react'],
-  },
-
-  // Security headers
-  async headers() {
-    return [
       {
         source: '/(.*)',
         headers: [
