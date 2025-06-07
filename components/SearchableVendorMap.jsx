@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+
 const allVendors = [
   { name: "Sharma's Chole Bhature", location: "Karol Bagh, Delhi", cuisine: "North Indian", tags: ["Vegetarian", "Chole Bhature"], coordinates: [28.6508, 77.1901], rating: 4.8 },
   { name: "Mumbai Vada Pav King", location: "Andheri West, Mumbai", cuisine: "Maharashtrian", tags: ["Vada Pav", "Snacks"], coordinates: [19.1352, 72.8264], rating: 4.6 },
