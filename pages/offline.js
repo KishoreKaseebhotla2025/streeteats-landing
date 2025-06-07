@@ -3,6 +3,12 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
 export default function OfflinePage() {
+  const handleRetry = () => {
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
+  };
+
   return (
     <>
       <Head>
@@ -28,7 +34,7 @@ export default function OfflinePage() {
           
           <div className={styles.emailBox}>
             <button 
-              onClick={() => window.location.reload()} 
+              onClick={handleRetry}
               className={styles.submitButton}
               style={{ marginTop: '2rem' }}
             >
