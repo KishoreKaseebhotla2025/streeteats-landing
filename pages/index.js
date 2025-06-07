@@ -4,18 +4,24 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 
-const SearchableVendorMap = dynamic(() => import('../components/SearchableVendorMap'), { ssr: false });
+const SearchableVendorMap = dynamic(() => import('../components/SearchableVendorMap'), { 
+  ssr: false,
+  loading: () => <div className={styles.mapContainer} style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading map...</div>
+});
 
 export default function HomePage() {
   useEffect(() => {
-    document.body.style.margin = 0;
-    document.body.style.fontFamily = `'Montserrat', sans-serif`;
-    document.body.style.background = '#ffffff';
-    document.body.style.color = '#222';
-    document.body.style.padding = 0;
+    // Set body styles
+    if (typeof document !== 'undefined') {
+      document.body.style.margin = '0';
+      document.body.style.fontFamily = `'Montserrat', sans-serif`;
+      document.body.style.background = '#ffffff';
+      document.body.style.color = '#222';
+      document.body.style.padding = '0';
+    }
 
     // Register service worker
-    if ('serviceWorker' in navigator) {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
           .then((registration) => {
